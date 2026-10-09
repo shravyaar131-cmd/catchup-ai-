@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CatchUp AI — What Did I Miss?</title>
+  <meta name="description" content="AI micro-app to synthesize unread chat conversations into prioritized summaries, blockers, decisions, and action items.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="container header-content">
+      <div class="brand-wrapper">
+        <div class="brand-icon">
+          <!-- Compass / CatchUp Icon -->
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>CatchUp AI <span class="hackathon-pill">Hackathon 2026</span></h1>
+          <div class="brand-subtitle">“What Did I Miss?” — Intelligent Unread Chat Synthesizer</div>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- Live Privacy Indicator -->
+        <div class="privacy-pill" id="privacyBadge" title="Click to view privacy & engine settings">
+          <span class="privacy-dot" id="privacyDot"></span>
+          <span id="privacyStatusText">100% Local NLP (Zero Cloud Sharing)</span>
+        </div>
+
+        <!-- Engine Settings Modal Trigger -->
+        <button class="btn-icon" id="openSettingsBtn" title="AI Engine & API Settings" aria-label="Settings">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-content">
+    <div class="container">
+
+      <!-- Value Proposition / Pitch Banner -->
+      <section class="pitch-banner">
+        <div class="pitch-content">
+          <h2>Missed 80+ unread Slack, Discord or WhatsApp messages?</h2>
+          <p>CatchUp AI cuts through the noise in seconds: extracting the core topic, critical blockers, team decisions, assigned tasks, and confirmed deadlines.</p>
+        </div>
+        <div class="pitch-badges">
+          <span class="feature-tag">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            No Invented Owners
+          </span>
+          <span class="feature-tag">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Evidence Quotes
+          </span>
+          <span class="feature-tag">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Priority Rationale
+          </span>
+        </div>
+      </section>
+
+      <!-- Input Console -->
+      <section class="input-section">
+        <div class="input-header">
+          <div class="input-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+            <span>Paste Chat Transcript</span>
+          </div>
+
+          <!-- Sample Buttons for Quick Demo -->
+          <div class="sample-button-group">
+            <span class="sample-label">Try Demo:</span>
+            <button type="button" class="btn-sample" data-sample="launchCrunch">
+              ⚡ Sample 1: Launch Crunch
+            </button>
+            <button type="button" class="btn-sample" data-sample="incidentOutage">
+              ⚡ Sample 2: Critical Outage
+            </button>
+            <button type="button" class="btn-sample" data-sample="productSync">
+              ⚡ Sample 3: Product Sync
+            </button>
+          </div>
+        </div>
+
+        <div class="textarea-wrapper">
+          <textarea 
+            id="chatInput" 
+            class="chat-input" 
+            placeholder="Paste your chat history here (supports Slack, Teams, WhatsApp, Discord, or raw lines)...&#10;Example:&#10;[10:15 AM] Sarah: Launch freeze is today at 6 PM!&#10;[10:16 AM] David: Blocker: Stripe 500 error on checkout. @David will fix by 12:30 PM.&#10;[10:18 AM] Sarah: Decision: If not resolved by 2 PM, fallback to USD-only."
+            spellcheck="false"
+          ></textarea>
+          <div class="textarea-footer">
+            <span id="charCount">0 characters | 0 lines</span>
+            <span>Supports formats with timestamps, senders, and @mentions</span>
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="control-bar">
+          <div class="controls-left">
+            <button type="button" id="analyzeBtn" class="btn-primary">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2l2.4 7.2L22 10l-5.6 4.8 1.8 7.2-6.2-4.2-6.2 4.2 1.8-7.2L2 10l7.6-.8z"/>
+              </svg>
+              <span>Catch Me Up</span>
+            </button>
+            <button type="button" id="resetBtn" class="btn-secondary">
+              Reset / Clear
+            </button>
+          </div>
+
+          <div class="privacy-notice-inline">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            <span id="privacyDisclaimerText">Local-first mode active. Your conversations are not uploaded anywhere.</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Error Notification Banner -->
+      <div id="errorBanner" class="error-banner">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        <span id="errorMessage">Error text here</span>
+      </div>
+
+      <!-- Loading State -->
+      <section id="loadingBox" class="loading-box">
+        <div class="loading-spinner"></div>
+        <div class="loading-step" id="loadingStep">Scanning transcript & identifying participants...</div>
+        <div class="loading-subtext">Synthesizing blockers, tasks, priorities, and deadlines</div>
+      </section>
+
+      <!-- Empty State (Shown before first analysis) -->
+      <section id="emptyState" class="empty-state">
+        <div class="empty-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+          </svg>
+        </div>
+        <h3>Ready to Catch You Up</h3>
+        <p>Paste an unread team discussion above or click one of the sample buttons to test with realistic hackathon launch crunch data.</p>
+        <button type="button" class="btn-sample" data-sample="launchCrunch">
+          ⚡ Try Sample 1 (Launch Crunch)
+        </button>
+      </section>
+
+      <!-- Results Dashboard -->
+      <div id="resultsDashboard" class="results-dashboard">
+
+        <!-- Top Stats Bar -->
+        <div class="stats-bar">
+          <div class="stat-card">
+            <div class="stat-icon teal">💬</div>
+            <div class="stat-info">
+              <span class="stat-value" id="statMessages">0</span>
+              <span class="stat-label">Messages Parsed</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon emerald">👥</div>
+            <div class="stat-info">
+              <span class="stat-value" id="statParticipants">0</span>
+              <span class="stat-label">Participants</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon red">🚨</div>
+            <div class="stat-info">
+              <span class="stat-value" id="statHighPriority">0</span>
+              <span class="stat-label">High Priority Items</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon amber">✅</div>
+            <div class="stat-info">
+              <span class="stat-value" id="statActionItems">0</span>
+              <span class="stat-label">Action Items Logged</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Bar: Export, Copy, Engine Disclosure -->
+        <div class="dashboard-actions-bar">
+          <div class="engine-disclosure-pill" id="resultEngineDisclosure">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            <span id="engineBadgeText">Engine: CatchUp Local NLP (100% Private)</span>
+          </div>
+
+          <div class="export-group">
+            <button type="button" class="btn-tool" id="copySummaryBtn" title="Copy full report to clipboard">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span>Copy Report</span>
+            </button>
+            <button type="button" class="btn-tool" id="downloadReportBtn" title="Download report text file">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              <span>Download (.txt)</span>
+            </button>
+            <button type="button" class="btn-tool" id="printReportBtn" title="Print or save as PDF">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                <rect x="6" y="14" width="12" height="8"></rect>
+              </svg>
+              <span>Print / PDF</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Main Results Grid -->
+        <div class="dashboard-grid">
+
+          <!-- Section 1: AI Conversation Summary (Span 12) -->
+          <div class="dash-card col-12">
+            <div class="card-header-flex">
+              <div class="card-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                </svg>
+                <span>AI Executive Summary & Main Topic</span>
+              </div>
+              <span class="card-badge">Instant Synthesis</span>
+            </div>
+
+            <!-- Main Topic Spotlight Banner -->
+            <div class="topic-spotlight">
+              <div class="topic-label">Primary Discussion Topic</div>
+              <div class="topic-title" id="summaryTopic">—</div>
+            </div>
+
+            <!-- Bullet Points -->
+            <ul class="summary-bullets" id="summaryBulletsList">
+              <!-- Dynamically populated -->
+            </ul>
+          </div>
+
+          <!-- Section 2: Important Messages, Decisions & Blockers (Span 6) -->
+          <div class="dash-card col-6">
+            <div class="card-header-flex">
+              <div class="card-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+                <span>Important Messages & Decisions</span>
+              </div>
+              <span class="card-badge" id="importantBadge">0 Extracted</span>
+            </div>
+
+            <p style="font-size: 0.78rem; color: var(--text-light-muted); margin-bottom: 0.85rem;">
+              Announcements, team decisions, and technical blockers with original evidence quotes.
+            </p>
+
+            <div class="items-list" id="importantItemsList">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <!-- Section 3: Action Items & Tasks (Span 6) -->
+          <div class="dash-card col-6">
+            <div class="card-header-flex">
+              <div class="card-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                  <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                </svg>
+                <span>Action Items & Requests</span>
+              </div>
+              <span class="card-badge" id="actionBadge">0 Tasks</span>
+            </div>
+
+            <p style="font-size: 0.78rem; color: var(--text-light-muted); margin-bottom: 0.85rem;">
+              Assigned owners and deadlines. Unassigned requests are never falsely attributed.
+            </p>
+
+            <div class="action-items-list" id="actionItemsList">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <!-- Section 4: Priority Breakdown (Span 12) -->
+          <div class="dash-card col-12">
+            <div class="card-header-flex">
+              <div class="card-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="18" y1="20" x2="18" y2="10"></line>
+                  <line x1="12" y1="20" x2="12" y2="4"></line>
+                  <line x1="6" y1="20" x2="6" y2="14"></line>
+                </svg>
+                <span>Priority Matrix & Rationale</span>
+              </div>
+              <span class="card-badge">Balanced Triaging</span>
+            </div>
+
+            <p style="font-size: 0.78rem; color: var(--text-light-muted); margin-bottom: 1rem;">
+              Information is categorized by urgency with clear rationale. Not every message is labeled urgent.
+            </p>
+
+            <div class="priority-columns">
+              <!-- High Tier -->
+              <div class="priority-tier high">
+                <div class="tier-header">
+                  <span class="tier-title">High Priority</span>
+                  <span class="tier-count" id="countHigh">0</span>
+                </div>
+                <div class="tier-definition" id="defHigh">
+                  Critical blockers, emergency fixes, and hard launch-blocking deadlines.
+                </div>
+                <div class="tier-items" id="itemsHigh"></div>
+              </div>
+
+              <!-- Medium Tier -->
+              <div class="priority-tier medium">
+                <div class="tier-header">
+                  <span class="tier-title">Medium Priority</span>
+                  <span class="tier-count" id="countMed">0</span>
+                </div>
+                <div class="tier-definition" id="defMed">
+                  Action items, verified fixes, design reviews, and scheduled syncs.
+                </div>
+                <div class="tier-items" id="itemsMed"></div>
+              </div>
+
+              <!-- Low Tier -->
+              <div class="priority-tier low">
+                <div class="tier-header">
+                  <span class="tier-title">Low Priority</span>
+                  <span class="tier-count" id="countLow">0</span>
+                </div>
+                <div class="tier-definition" id="defLow">
+                  Routine announcements, backlog explorations, and non-blocking discussions.
+                </div>
+                <div class="tier-items" id="itemsLow"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 5: Deadlines & Mention Timeline (Span 12) -->
+          <div class="dash-card col-12">
+            <div class="card-header-flex">
+              <div class="card-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                <span>Deadlines & Direct Mentions</span>
+              </div>
+              <span class="card-badge">Time & Accountability</span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+              <!-- Deadlines column -->
+              <div>
+                <h4 style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.6rem; font-weight: 700;">
+                  📅 Detected Dates & Deadlines (Confirmed vs Ambiguous)
+                </h4>
+                <div class="deadline-timeline" id="deadlinesList">
+                  <!-- Dynamically populated -->
+                </div>
+              </div>
+
+              <!-- Mentions column -->
+              <div>
+                <h4 style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.6rem; font-weight: 700;">
+                  📣 Direct @Mentions
+                </h4>
+                <div class="mentions-cloud" id="mentionsCloud">
+                  <!-- Dynamically populated -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Settings & Privacy Modal Drawer -->
+  <div class="modal-overlay" id="settingsModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>AI Engine & Privacy Settings</h3>
+        <button type="button" class="btn-icon" id="closeSettingsBtn" aria-label="Close settings">✕</button>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="engineSelect">Processing Engine Mode</label>
+        <select id="engineSelect" class="form-select">
+          <option value="local">Local Heuristic NLP Engine (100% Offline, Recommended for Demo)</option>
+          <option value="gemini">Google Gemini Cloud AI (Requires API Key)</option>
+          <option value="openai">OpenAI Cloud API (Requires API Key)</option>
+        </select>
+        <p class="form-help">
+          Local mode runs purely inside your browser without any network requests or API costs.
+        </p>
+      </div>
+
+      <div class="form-group" id="apiKeyGroup" style="display: none;">
+        <label class="form-label" for="apiKeyInput">Cloud AI API Key</label>
+        <input type="password" id="apiKeyInput" class="form-input" placeholder="Paste your Gemini or OpenAI API key...">
+        <p class="form-help">
+          Your key is stored strictly in browser session memory and is NEVER transmitted to any intermediate server or committed to GitHub.
+        </p>
+      </div>
+
+      <div class="topic-spotlight" style="padding: 0.75rem; font-size: 0.78rem;">
+        <strong style="color: var(--primary-teal); display: block; margin-bottom: 0.25rem;">🔒 Privacy Disclosure Guarantee:</strong>
+        CatchUp AI is local-first by design. When in Local Mode, your conversations never leave your device. When Cloud Mode is enabled, requests go directly to the chosen provider's official endpoint via HTTPS.
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" id="cancelSettingsBtn">Close</button>
+        <button type="button" class="btn-primary" id="saveSettingsBtn">Save & Apply</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toastNotice" class="toast-notice">Copied report to clipboard!</div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div>
+        <strong>CatchUp AI</strong> — Built for Hackathons with a privacy-first, zero-overhead architecture.
+      </div>
+      <div>
+        Designed for Slack, Discord, WhatsApp, and Microsoft Teams catchup.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="sample-data.js"></script>
+  <script src="ai-engine.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
